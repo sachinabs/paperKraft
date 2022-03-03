@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/sachinabs/paperKraft/issues"
   },
-  "homepage": "https://github.com/sachinabs/paperKraft#readme"
+  "homepage": "https://github.com/sachinabs/paperKraft#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
 }
