@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/sachinabs/paperKraft#readme",
   "dependencies": {
-    "express": "^4.17.3"
+    "aws-sdk": "^2.1087.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "joi": "^17.6.0"
   }
 }

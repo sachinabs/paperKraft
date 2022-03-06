@@ -3,13 +3,14 @@ const app = express();
 const bodyParser = require('body-parser');
 
 const controller = require('./controller/index')
-
+const validator = require('./middleware/validation')
 
 
 
 app.use(bodyParser.json());
 
-app.post('/create-new-post', controller.createNewPost);
+app.post('/create-new-post', validator.userDetails, controller.createNewPost);
+
 
 
 

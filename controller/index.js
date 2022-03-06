@@ -1,11 +1,15 @@
+const dynamodbRepo = require('../dynamoDB');
 
 const createNewPost = (req, res) => {
-    let usernames = req.body.usernames;
 
-    res.send(userData);
-
-
-
+    try {
+        dynamodbRepo.createNewPostInDynamoDB(req);
+        res.send("success");
+    }
+    catch (error) {
+        res.status(500).send(error);
+    }
+    
 }
 
 module.exports = {
