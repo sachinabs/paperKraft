@@ -8,9 +8,46 @@ AWS.config.update({
 });
 
 
+const createNewUser = async (user) => {
+
+    try {
+        const dynamodb = new AWS.DynamoDB.DocumentClient();
+        const params = {
+            TableName: "user_personal_details",
+            Key: {
+                email: user.email
+            }
+        };
+        const data = await dynamodb.get(params).promise();
+        if (data.Item) {
+           return { 
+                message: "User already exists"
+           }
+        }
+        else {
+            const params = {
+                TableName: "user_personal_details",
+                Item: {
+                    email: user.email,
+                    name: user.name,
+                    password: user.password,
+                    id: user.id
+                }
+            };
+            await dynamodb.put(params).promise();
+            return {
+                message: "User created successfully"
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 const createNewPostInDynamoDB = async (req, res) => {
-    
-    const userPost={
+
+    const userPost = {
         email: req.body.email,
         id: req.body.id,
         title: req.body.title,
@@ -33,6 +70,27 @@ const createNewPostInDynamoDB = async (req, res) => {
 
 }
 
+const readPostById = async (req, res) => {
+    try {
+        const dynamodb = new AWS.DynamoDB.DocumentClient();
+        const params = {
+            TableName: "user_personal_details",
+            Key: {
+                email: req.body.email
+            }
+        };
+        const data = await dynamodb.get(params).promise();
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+
+
 module.exports = {
-    createNewPostInDynamoDB
+    createNewUser,
+    createNewPostInDynamoDB,
+    readPostById,
 }

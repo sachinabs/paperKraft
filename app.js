@@ -9,7 +9,16 @@ const validator = require('./middleware/validation')
 
 app.use(bodyParser.json());
 
+
+app.post("/sign-in",controller.userSignIn);
+
+
+
+
 app.post('/create-new-post', validator.userDetails, controller.createNewPost);
+// learning purpose
+app.post('/read-post-by-id', controller.readPostById);
+
 
 
 

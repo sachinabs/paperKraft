@@ -1,4 +1,23 @@
 const dynamodbRepo = require('../dynamoDB');
+const { v4: uuidv4 } = require('uuid');
+
+
+const userSignIn = async (req,res) => {
+    const user = {
+        email: req.body.email,
+        name: req.body.name,
+        password: req.body.password,
+        id: uuidv4(43),
+    }
+    try {
+       const response = await dynamodbRepo.createNewUser(user);
+       res.send(response);
+    }
+    catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
 
 const createNewPost = (req, res) => {
 
@@ -12,6 +31,18 @@ const createNewPost = (req, res) => {
     
 }
 
+const readPostById = (req, res) => {
+    try {
+        dynamodbRepo.readPostById(req, res);
+    }
+    catch (error) {
+        res.status(500).send(error);
+    }
+}
+
+
 module.exports = {
-    createNewPost
+    createNewPost,
+    readPostById,
+    userSignIn
 }
