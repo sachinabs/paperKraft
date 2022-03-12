@@ -11,6 +11,7 @@ app.use(bodyParser.json());
 
 app.post('/sign-in', controller.userSignup);
 app.post('/log-in', controller.userLogin);
+app.post('/create-new-post', controller.createNewPost);
 
 
 

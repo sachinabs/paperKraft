@@ -1,5 +1,6 @@
 const dynamodbRepo = require('../dynamoDB');
 const { v4: uuidv4 } = require('uuid');
+const { response } = require('express');
 
 const userSignup = async(req, res) => {
     const user = {
@@ -35,9 +36,29 @@ const userLogin = async(req, res) => {
         })
     }
 }
+const createNewPost = async(req, res) => {
+    const dateNow = new Date();
+    const newPost = {
+        title: req.body.title,
+        post: req.body.post,
+        postuuid: uuidv4(24),
+        useruuid: req.body.useruuid, // get uuid from header
+        date: dateNow.getDate() + "-" + dateNow.getMonth() + "-" + dateNow.getFullYear(),
+        time: dateNow.getTime()
+    }
+    console.log(newPost);
+    try {
+        const response = await dynamodbRepo.createPost(newPost);
+        res.send(response);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+
+}
 
 
 module.exports = {
     userSignup,
-    userLogin
+    userLogin,
+    createNewPost
 }

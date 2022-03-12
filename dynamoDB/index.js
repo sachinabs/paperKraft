@@ -54,8 +54,25 @@ const userLoginDetail = async(req, res) => {
         console.error(error);
         throw error;
     }
-
-
+}
+const createPost = async(newPost) => {
+    const dynamodb = new AWS.DynamoDB.DocumentClient();
+    try {
+        const params = {
+            TableName: "user_details",
+            Item: {
+                title: newPost.title,
+                post: newPost.post,
+                postuuid: uuidv4(24),
+                useruuid: newPost.useruuid,
+                date: newPost.date,
+                time: newPost.time
+            }
+        };
+        await dynamodb.put(params).promise();
+    } catch (error) {
+        console.log(error);
+    }
 
 }
 
@@ -63,5 +80,6 @@ const userLoginDetail = async(req, res) => {
 
 module.exports = {
     signupDetail,
-    userLoginDetail
+    userLoginDetail,
+    createPost
 }
