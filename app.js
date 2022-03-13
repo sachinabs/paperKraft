@@ -9,10 +9,9 @@ const validator = require('./middleware/validation')
 
 app.use(bodyParser.json());
 
-app.post('/sign-in', controller.userSignup);
-app.post('/log-in', controller.userLogin);
+app.post('/sign-in', validator.userSignIn, controller.userSignup);
+app.post('/log-in', validator.userLogin, controller.userLogin);
 app.post('/create-new-post', controller.createNewPost);
-
 
 
 

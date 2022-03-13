@@ -1,12 +1,14 @@
 const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
 require("dotenv").config();
+
 AWS.config.update({
     region: process.env.AWS_DEFAULT_REGION,
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
-const signupDetail = async(user) => {
+
+const signupDetail = async (user) => {
     try {
         const dynamodb = new AWS.DynamoDB.DocumentClient();
         const params = {
@@ -39,7 +41,8 @@ const signupDetail = async(user) => {
         throw error;
     }
 }
-const userLoginDetail = async(req, res) => {
+
+const userLoginDetail = async (req, res) => {
     try {
         const dynamodb = new AWS.DynamoDB.DocumentClient();
         const params = {
@@ -55,21 +58,59 @@ const userLoginDetail = async(req, res) => {
         throw error;
     }
 }
-const createPost = async(newPost) => {
+
+const createPost = async (newPost) => {
     const dynamodb = new AWS.DynamoDB.DocumentClient();
     try {
         const params = {
             TableName: "user_details",
-            Item: {
-                title: newPost.title,
-                post: newPost.post,
-                postuuid: uuidv4(24),
-                useruuid: newPost.useruuid,
-                date: newPost.date,
-                time: newPost.time
+            Key: {
+                useruuid: newPost.useruuid
             }
         };
-        await dynamodb.put(params).promise();
+        const isColumnExists = await dynamodb.get(params).promise();
+        if (isColumnExists.Item == undefined ) {
+            const params = {
+                TableName: "user_details",
+                Item: {
+                    useruuid: newPost.useruuid,
+                    post: [{
+                        title: newPost.title,
+                        post: newPost.post,
+                        postuuid: newPost.postuuid,
+                        useruuid: newPost.useruuid,
+                        date: newPost.date,
+                        time: newPost.time
+                    }]
+                }
+            };
+            
+            const response = await dynamodb.put(params).promise();
+            return response;
+
+        } else {
+            const params = {
+                TableName: "user_details",
+                Key: {
+                    useruuid: newPost.useruuid
+                },
+                UpdateExpression: "set post = list_append(post, :post)",
+                ExpressionAttributeValues: {
+                    ":post": [{
+                        title: newPost.title,
+                        post: newPost.post,
+                        postuuid: newPost.postuuid,
+                        useruuid: newPost.useruuid,
+                        date: newPost.date,
+                        time: newPost.time
+                    }]
+                },
+                ReturnValues: "UPDATED_NEW"
+            };
+            const response = await dynamodb.update(params).promise();
+            return response;
+        }
+
     } catch (error) {
         console.log(error);
     }
