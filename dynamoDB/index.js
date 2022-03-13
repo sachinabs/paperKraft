@@ -8,7 +8,7 @@ AWS.config.update({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
 
-const signupDetail = async (user) => {
+const signupDetail = async(user) => {
     try {
         const dynamodb = new AWS.DynamoDB.DocumentClient();
         const params = {
@@ -42,7 +42,7 @@ const signupDetail = async (user) => {
     }
 }
 
-const userLoginDetail = async (req, res) => {
+const userLoginDetail = async(req, res) => {
     try {
         const dynamodb = new AWS.DynamoDB.DocumentClient();
         const params = {
@@ -59,9 +59,10 @@ const userLoginDetail = async (req, res) => {
     }
 }
 
-const createPost = async (newPost) => {
+const createPost = async(newPost) => {
     const dynamodb = new AWS.DynamoDB.DocumentClient();
     try {
+
         const params = {
             TableName: "user_details",
             Key: {
@@ -69,7 +70,7 @@ const createPost = async (newPost) => {
             }
         };
         const isColumnExists = await dynamodb.get(params).promise();
-        if (isColumnExists.Item == undefined ) {
+        if (isColumnExists.Item == undefined) {
             const params = {
                 TableName: "user_details",
                 Item: {
@@ -84,7 +85,7 @@ const createPost = async (newPost) => {
                     }]
                 }
             };
-            
+
             const response = await dynamodb.put(params).promise();
             return response;
 
