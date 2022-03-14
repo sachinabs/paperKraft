@@ -117,11 +117,30 @@ const createPost = async(newPost) => {
     }
 
 }
+const readPosts = async(req, res) => {
+    const dynamodb = new AWS.DynamoDB.DocumentClient();
+
+    const params = {
+        TableName: "user_details",
+        projectionExpresssion: "post"
+
+    }
+    try {
+        const response = await dynamodb.scan(params).promise();
+        return response;
+
+    } catch (error) {
+
+    }
+    console.log(error);
+}
 
 
 
 module.exports = {
     signupDetail,
     userLoginDetail,
-    createPost
+    createPost,
+    readPosts
+
 }

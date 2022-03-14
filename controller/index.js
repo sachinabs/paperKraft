@@ -55,10 +55,22 @@ const createNewPost = async(req, res) => {
     }
 
 }
+const readAllPost = async(req, res) => {
+    try {
+        const response = await dynamodbRepo.readPosts();
+        res.send(response);
+
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
+
 
 
 module.exports = {
     userSignup,
     userLogin,
-    createNewPost
+    createNewPost,
+    readAllPost
+
 }
