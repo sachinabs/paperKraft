@@ -13,6 +13,8 @@ app.post('/sign-in', validator.userSignIn, controller.userSignup);
 app.post('/log-in', validator.userLogin, controller.userLogin);
 app.post('/create-new-post', controller.createNewPost);
 
+app.get('/common-route',controller.commonRouter);
+
 
 
 const port = process.env.PORT || 5000;

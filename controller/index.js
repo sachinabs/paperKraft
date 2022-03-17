@@ -56,9 +56,15 @@ const createNewPost = async(req, res) => {
 
 }
 
+const commonRouter=(req,res)=>{
+    res.send("hello");
+    console.log("From common router");
+}
+
 
 module.exports = {
     userSignup,
     userLogin,
-    createNewPost
+    createNewPost,
+    commonRouter
 }
